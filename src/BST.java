@@ -1,9 +1,11 @@
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 
 /**
  * An Integer Binary Search Tree
- * @author: Your Name Here
- * @version: Date
+ * @author: Sohan Gaitonde
+ * @version: 4/21/23
  */
 
 public class BST {
@@ -48,6 +50,34 @@ public class BST {
      */
     public boolean search(int val) {
         // TODO: Complete the search function
+        // if the number is found return true else return false
+        if(isfound(this.getRoot(), val)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isfound(BSTNode n, int val) {
+        // if the value is in this node return true
+        if(n.getVal() == val) {
+            return true;
+        }
+        // else if the value of this node is larger than what you are looking for go left
+        if(n.getVal() > val) {
+            // if there is something in the left node, recursivley call this method with that node
+            if(n.getLeft() != null) {
+                return isfound(n.getLeft(), val);
+            }
+            // if there is nothing in that node the number cant be in the tree so return false
+            return false;
+        }
+        // very similar to previous if statement except if it looks at if the node is less than the value
+        else if(n.getVal() < val){
+            if(n.getRight() != null) {
+                return isfound(n.getRight(), val);
+            }
+            return false;
+        }
         return false;
     }
 
@@ -56,7 +86,19 @@ public class BST {
      */
     public ArrayList<BSTNode> getInorder() {
         // TODO: Complete inorder traversal
-        return null;
+        // calls a helper recursive method and returns the result
+        ArrayList<BSTNode> arr = new ArrayList<>();
+        return sortInorder(arr, this.getRoot());
+    }
+
+    public ArrayList<BSTNode> sortInorder(ArrayList<BSTNode> arr, BSTNode n) {
+        // if the node is real, recursivley run the code on the left then add the node to the arraylist and then run it on the right
+        if (n != null) {
+            sortInorder(arr, n.getLeft());
+            arr.add(n);
+            sortInorder(arr, n.getRight());
+        }
+        return arr;
     }
 
     /**
@@ -64,15 +106,38 @@ public class BST {
      */
     public ArrayList<BSTNode> getPreorder() {
         // TODO: Complete preorder traversal
-        return null;
+        // calls a helper recursive method and returns the result
+        ArrayList<BSTNode> arr = new ArrayList<>();
+        return sortPreorder(arr, this.getRoot());
+    }
+
+    private ArrayList<BSTNode> sortPreorder(ArrayList<BSTNode> arr, BSTNode node) {
+        // if the node is real, add the node to the arraylist, then run it on the left and then run it on the right
+        if (node != null) {
+            arr.add(node);
+            sortPreorder(arr, node.getLeft());
+            sortPreorder(arr, node.getRight());
+        }
+        return arr;
     }
 
     /**
      * @return ArrayList of BSTNodes in postorder
      */
     public ArrayList<BSTNode> getPostorder() {
-        // TODO: Complete postorder traversal
-        return null;
+        // calls a helper recursive method and returns the result
+        ArrayList<BSTNode> arr = new ArrayList<>();
+        return sortPostorder(arr, this.getRoot());
+    }
+
+    private ArrayList<BSTNode> sortPostorder(ArrayList<BSTNode> arr, BSTNode node) {
+        // if the node is real, run it on the left, then run it on the right and then add the node to the arraylist
+        if (node != null) {
+            sortPostorder(arr, node.getLeft());
+            sortPostorder(arr, node.getRight());
+            arr.add(node);
+        }
+        return arr;
     }
 
     /**
@@ -83,6 +148,23 @@ public class BST {
      */
     public void insert(int val) {
         // TODO: Complete insert
+        // calls a recursive method that inserts the value given
+        insertHelper(this.getRoot(), val);
+    }
+    private BSTNode insertHelper(BSTNode n, int value) {
+        // if there is node here create a new node here with the value
+        if (n == null) {
+            return new BSTNode(value);
+        }
+        // if the value is less than this node go left and run the method again
+        else if (value < n.getVal()) {
+            n.setLeft(insertHelper(n.getLeft(), value));
+        }
+        // if the value is less than this node go right and run the method again
+        else if (value > n.getVal()) {
+            n.setRight(insertHelper(n.getRight(), value));
+        }
+        return n;
     }
 
     /**
